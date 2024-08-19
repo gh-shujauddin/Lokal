@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Lokal</string>
+    <string name="lokal">Lokal</string>
+    <string name="your_ideal_job_here">Your Ideal Job Here!</string>
 </resources>
