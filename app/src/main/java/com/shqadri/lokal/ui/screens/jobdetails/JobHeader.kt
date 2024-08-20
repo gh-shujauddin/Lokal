@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material.icons.outlined.Group
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.shqadri.lokal.domain.models.JobUIState
 import com.shqadri.lokal.domain.models.PrimaryDetails
 import com.shqadri.lokal.utils.formatDate
 
@@ -35,7 +37,12 @@ fun JobHeader(
     applicantCount: String,
     jobPostDate: String,
     vacancy: Int,
-    jobDetails: PrimaryDetails,
+    salary: String,
+    place: String,
+    jobType: String,
+    experience: String,
+    qualification: String,
+    isBookmarked: Boolean,
     onBookmark: () -> Unit
 ) {
     Column(modifier.fillMaxWidth()) {
@@ -49,29 +56,34 @@ fun JobHeader(
             )
 
             Icon(
-                imageVector = Icons.Outlined.BookmarkBorder,
+                imageVector = if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
                 contentDescription = "bookmark",
                 modifier = Modifier.clickable {
                     onBookmark()
-                }
+                },
+                tint = MaterialTheme.colorScheme.primary
             )
 
         }
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = jobDetails.Salary,
+            text = salary,
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
             color = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        JobHeaderItem(icon = Icons.Outlined.LocationOn, text = jobDetails.Place)
+        JobHeaderItem(icon = Icons.Outlined.LocationOn, text = place)
         Spacer(modifier = Modifier.height(12.dp))
         JobHeaderItem(icon = Icons.Outlined.Business, text = companyName)
         Spacer(modifier = Modifier.height(12.dp))
         JobHeaderItem(icon = Icons.Outlined.Group, text = "$vacancy vacancies")
         Spacer(modifier = Modifier.height(20.dp))
-        JobDetailContainer(jobDetails = jobDetails)
+        JobDetailContainer(
+            jobType = jobType,
+            experience = experience,
+            qualification = qualification
+        )
         Spacer(modifier = Modifier.height(20.dp))
         Row(
             Modifier
@@ -85,7 +97,7 @@ fun JobHeader(
                 color = MaterialTheme.colorScheme.primary.copy(0.5f)
             )
             Text(
-                text = "Posted on ${jobPostDate.formatDate()}",
+                text = "Posted on $jobPostDate",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.primary.copy(0.5f)
             )

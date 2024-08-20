@@ -3,6 +3,7 @@ package com.shqadri.lokal.ui.screens.jobs
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.DesignServices
 import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material.icons.filled.Lightbulb
@@ -30,6 +33,7 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -63,6 +67,7 @@ import androidx.compose.ui.unit.sp
 import com.shqadri.lokal.R
 import com.shqadri.lokal.domain.models.Category
 import com.shqadri.lokal.domain.models.Job
+import com.shqadri.lokal.domain.models.JobUIState
 
 //Top App bar with text and other icons
 @Composable
@@ -151,18 +156,22 @@ fun CategoryCard(modifier: Modifier = Modifier, category: Category) {
 */
 @Composable
 fun JobListingCard(
-    job: Job,
+    job: JobUIState,
     onCallHrClick: () -> Unit,
     onCardClick: () -> Unit,
-    onBookmark: () -> Unit
+    onBookmark: () -> Unit,
+    isBookmarked: Boolean
 ) {
     Card(
         onClick = onCardClick,
         elevation = CardDefaults.cardElevation(4.dp),
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
-            .fillMaxWidth(),
-        colors = CardDefaults.cardColors(Color.White)
+            .fillMaxWidth().padding(horizontal = 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        )
     ) {
         Column(
             modifier = Modifier
@@ -182,16 +191,17 @@ fun JobListingCard(
                     modifier = Modifier.weight(1f)
                 )
                 Icon(
-                    imageVector = Icons.Outlined.BookmarkBorder,
+                    imageVector = if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
                     contentDescription = "bookmark",
                     modifier = Modifier.clickable {
                         onBookmark()
-                    }
+                    },
+                    tint = MaterialTheme.colorScheme.primary
                 )
-//
+
             }
             Text(
-                text = job.primaryDetails.Salary,
+                text = job.salary,
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.primary
             )
@@ -207,7 +217,7 @@ fun JobListingCard(
                 Icon(imageVector = Icons.Outlined.LocationOn, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = job.primaryDetails.Place,
+                    text = job.place,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -220,6 +230,11 @@ fun JobListingCard(
                         modifier = Modifier
                             .clip(MaterialTheme.shapes.small)
                             .background(Color(android.graphics.Color.parseColor(tag.bgColor)))
+                            .border(
+                                1.dp,
+                                Color(android.graphics.Color.parseColor(tag.textColor)),
+                                MaterialTheme.shapes.small
+                            )
                     ) {
                         Text(
                             text = tag.value,
@@ -235,77 +250,29 @@ fun JobListingCard(
                 onClick = onCallHrClick,
                 modifier = Modifier
                     .fillMaxWidth(),
-                shape = MaterialTheme.shapes.medium
+                shape = MaterialTheme.shapes.medium,
+                colors = ButtonDefaults.textButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
             ) {
-
-                Text(text = job.buttonText)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Call,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = stringResource(R.string.call_hr),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
             }
         }
 
 
     }
-}
-
-//Expandable textbox for showing large texts
-@Composable
-fun ExpandableText(
-    modifier: Modifier = Modifier,
-    textModifier: Modifier = Modifier,
-    style: TextStyle = LocalTextStyle.current,
-    text: String,
-    collapsedMaxLine: Int = 2,
-    showMoreText: String = "... ",
-    showMoreStyle: SpanStyle = SpanStyle(fontWeight = FontWeight.W500),
-    showLessText: String = "",
-    showLessStyle: SpanStyle = showMoreStyle,
-    textAlign: TextAlign? = null,
-    color: Color = Color.Unspecified
-) {
-    var isExpanded by remember { mutableStateOf(false) }
-    var clickable by remember { mutableStateOf(false) }
-    var lastCharIndex by remember { mutableStateOf(0) }
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
-    Box(modifier = Modifier
-        .clickable(interactionSource, indication = null) {
-            isExpanded = !isExpanded
-        }
-        .then(modifier)
-    ) {
-        Text(
-            modifier = textModifier
-                .fillMaxWidth()
-                .animateContentSize(),
-            text = buildAnnotatedString {
-                if (clickable) {
-                    if (isExpanded) {
-                        append(text)
-                        withStyle(style = showLessStyle) { append(showLessText) }
-                    } else {
-                        val adjustText = text.substring(startIndex = 0, endIndex = lastCharIndex)
-                            .dropLast(showMoreText.length)
-                            .dropLastWhile { Character.isWhitespace(it) || it == '.' }
-                        append(adjustText)
-                        withStyle(style = showMoreStyle) { append(showMoreText) }
-                    }
-                } else {
-                    append(text)
-                }
-            },
-            maxLines = if (isExpanded) Int.MAX_VALUE else collapsedMaxLine,
-            onTextLayout = { textLayoutResult ->
-                if (!isExpanded && textLayoutResult.hasVisualOverflow) {
-                    clickable = true
-                    lastCharIndex = textLayoutResult.getLineEnd(collapsedMaxLine - 1)
-                }
-            },
-            style = style,
-            textAlign = textAlign,
-            color = color
-        )
-    }
-
 }
 
 //Error indicator

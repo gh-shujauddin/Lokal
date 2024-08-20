@@ -18,6 +18,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -27,15 +29,17 @@ import com.shqadri.lokal.R
 import com.shqadri.lokal.domain.models.ApiResponse
 import com.shqadri.lokal.domain.models.Job
 import com.shqadri.lokal.domain.Resource
+import com.shqadri.lokal.domain.models.JobUIState
 import com.shqadri.lokal.ui.navigation.BottomNavBar
 import com.shqadri.lokal.ui.navigation.Screen
 
 @Composable
 fun JobsScreen(
-    jobsUiState: Resource<ApiResponse>,
-    navigateToJobDetail: (Job) -> Unit,
-    onBookmark: (Job) -> Unit,
-    onNavItemClick: (String) -> Unit
+    jobsUiState: Resource<List<JobUIState>>,
+    navigateToJobDetail: (JobUIState) -> Unit,
+    onBookmark: (JobUIState) -> Unit,
+    onNavItemClick: (String) -> Unit,
+    bookmarkJobIds: List<Int>
 ) {
     val context = LocalContext.current
 
@@ -71,7 +75,7 @@ fun JobsScreen(
                     item {
                         AppHeader()
                         Text(
-                            text = "Actively Hiring",
+                            text = stringResource(R.string.actively_hiring),
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(8.dp)
@@ -84,7 +88,7 @@ fun JobsScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .weight(1f),
-                                    text = "Please check you connection"
+                                    text = stringResource(R.string.please_check_you_connection)
                                 )
                             }
                         }
@@ -100,12 +104,16 @@ fun JobsScreen(
                         }
 
                         is Resource.Success -> {
-                            val jobs = jobsUiState.data?.results!!
+                            val jobs = jobsUiState.data!!
 
                             items(jobs) { job ->
                                 //Showing each jobs from API
-                                Log.d("JOBS", job.toString())
                                 if (job.id == null) return@items
+                                val isBookmarked by rememberUpdatedState(
+                                    newValue = bookmarkJobIds.contains(
+                                        job.id
+                                    )
+                                )
 
                                 JobListingCard(
                                     job = job,
@@ -119,15 +127,13 @@ fun JobsScreen(
                                     },
                                     onBookmark = {
                                         onBookmark(job)
-                                    }
+                                    },
+                                    isBookmarked = isBookmarked
                                 )
                             }
-
                         }
-
                     }
                 }
-
             }
         }
     }

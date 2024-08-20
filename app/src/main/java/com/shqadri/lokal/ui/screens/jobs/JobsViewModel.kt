@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.shqadri.lokal.data.JobsRepository
 import com.shqadri.lokal.domain.models.ApiResponse
 import com.shqadri.lokal.domain.Resource
+import com.shqadri.lokal.domain.models.JobUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,8 +18,8 @@ class JobsViewModel @Inject constructor(
     private val repository: JobsRepository
 ) : ViewModel() {
 
-    private val _jobsUiState = MutableStateFlow<Resource<ApiResponse>>(Resource.Loading())
-    val jobsUiState: StateFlow<Resource<ApiResponse>> = _jobsUiState.asStateFlow()
+    private val _jobsUiState = MutableStateFlow<Resource<List<JobUIState>>>(Resource.Loading())
+    val jobsUiState: StateFlow<Resource<List<JobUIState>>> = _jobsUiState.asStateFlow()
 
     init {
         fetchJobs()

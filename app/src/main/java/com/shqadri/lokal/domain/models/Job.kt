@@ -21,7 +21,9 @@ data class Job(
     val views: Int,
     @SerializedName("updated_on")
     val updatedOn: String,
+    @SerializedName("whatsapp_no")
     val whatsappNo: String,
+    @SerializedName("contact_preference")
     val contactPreference: ContactPreference,
     val createdOn: String,
     val contentV3: ContentV3,

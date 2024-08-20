@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Lokal</string>
-    <string name="lokal">Lokal</string>
+    <string name="lokal">Lokal Jobs</string>
     <string name="your_ideal_job_here">Your Ideal Job Here!</string>
     <string name="job_disclaimer">Lokal does not promise a job or an interview in exchange of money. Fraudsters may ask you to pay in the pretext of registration fee, refundable fee etc.</string>
+    <string name="call_hr">Call HR</string>
+    <string name="actively_hiring">Actively Hiring</string>
+    <string name="please_check_you_connection">Please check you connection</string>
+    <string name="tap_on_bookmark_icon_against_a_job_to_save_it">Tap on bookmark icon against a job to save it.</string>
+    <string name="no_saved_jobs">No saved jobs found</string>
+    <string name="bookmarked_jobs">Bookmarked jobs</string>
 </resources>

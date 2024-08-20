@@ -1,51 +1,49 @@
 package com.shqadri.lokal.domain.mappers
 
-import com.shqadri.lokal.domain.models.ContentV3Item
+import com.shqadri.lokal.domain.models.ContentV3ItemEntity
 import com.shqadri.lokal.domain.models.ContentV3ItemUIState
-import com.shqadri.lokal.domain.models.Job
-import com.shqadri.lokal.domain.models.JobTag
+import com.shqadri.lokal.domain.models.JobEntity
+import com.shqadri.lokal.domain.models.JobTagEntity
 import com.shqadri.lokal.domain.models.JobTagUIState
 import com.shqadri.lokal.domain.models.JobUIState
 
-fun Job.toUIState(): JobUIState {
-    return JobUIState(
-        id = id,
+fun JobUIState.toEntity(): JobEntity {
+    return JobEntity(
+        id = id ?: 0,
         title = title,
-        place = primaryDetails.Place,
-        salary = primaryDetails.Salary,
-        jobType = primaryDetails.Job_Type,
-        experience = primaryDetails.Experience,
-        qualification = primaryDetails.Qualification,
+        place = place,
+        salary = salary,
+        jobType = jobType,
+        experience = experience,
+        qualification = qualification,
         companyName = companyName,
         buttonText = buttonText,
         customLink = customLink,
         views = views,
         updatedOn = updatedOn,
         whatsappNo = whatsappNo,
-        whatsappLink = contactPreference.whatsappLink,
+        whatsappLink = whatsappLink,
         jobHours = jobHours,
         openingsCount = openingsCount,
         jobRole = jobRole,
         otherDetails = otherDetails,
         jobCategory = jobCategory,
         numApplications = numApplications,
-        jobTags = jobTags.map {
-            it.toUIState()
-        },
-        contentV3 = contentV3.V3.map { it.toUIState() }
+        jobTags = jobTags.map { it.toEntity() },
+        contentV3 = contentV3.map { it.toEntity() }
     )
 }
 
-fun JobTag.toUIState(): JobTagUIState {
-    return JobTagUIState(
+fun JobTagUIState.toEntity(): JobTagEntity {
+    return JobTagEntity(
         value = value,
         bgColor = bgColor,
         textColor = textColor
     )
 }
 
-fun ContentV3Item.toUIState(): ContentV3ItemUIState {
-    return ContentV3ItemUIState(
+fun ContentV3ItemUIState.toEntity(): ContentV3ItemEntity {
+    return ContentV3ItemEntity(
         fieldKey = fieldKey,
         fieldValue = fieldValue
     )
