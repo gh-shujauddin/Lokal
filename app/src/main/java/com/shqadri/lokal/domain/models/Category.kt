@@ -1,4 +1,4 @@
-package com.shqadri.lokal.model
+package com.shqadri.lokal.domain.models
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

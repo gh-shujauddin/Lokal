@@ -1,7 +1,7 @@
 package com.shqadri.lokal.data
 
-import com.shqadri.lokal.model.ApiResponse
-import com.shqadri.lokal.model.Resource
+import com.shqadri.lokal.domain.models.ApiResponse
+import com.shqadri.lokal.domain.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface JobsRepository {

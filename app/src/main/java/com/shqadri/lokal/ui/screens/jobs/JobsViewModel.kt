@@ -3,8 +3,8 @@ package com.shqadri.lokal.ui.screens.jobs
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shqadri.lokal.data.JobsRepository
-import com.shqadri.lokal.model.ApiResponse
-import com.shqadri.lokal.model.Resource
+import com.shqadri.lokal.domain.models.ApiResponse
+import com.shqadri.lokal.domain.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

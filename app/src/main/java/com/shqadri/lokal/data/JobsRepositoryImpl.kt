@@ -1,11 +1,8 @@
 package com.shqadri.lokal.data
 
-import com.shqadri.lokal.model.ApiResponse
-import com.shqadri.lokal.model.Job
-import com.shqadri.lokal.model.Resource
+import com.shqadri.lokal.domain.Resource
 import com.shqadri.lokal.network.JobsApiService
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn

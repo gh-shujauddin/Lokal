@@ -1,4 +1,4 @@
-package com.shqadri.lokal.model
+package com.shqadri.lokal.domain
 
 sealed class Resource<T>(
     val data: T? = null,
