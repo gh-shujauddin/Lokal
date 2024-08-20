@@ -20,6 +20,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Whatsapp
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material.icons.outlined.RemoveRedEye
 import androidx.compose.material3.Button
@@ -73,7 +74,33 @@ fun JobDetailsScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Handle share action */ }) {
+                    IconButton(
+                        onClick = {
+                            val whatsappLink = job.whatsappLink
+                            val intent = Intent(Intent.ACTION_VIEW)
+                            intent.data = android.net.Uri.parse(whatsappLink)
+                            context.startActivity(intent)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Whatsapp,
+                            contentDescription = "Whatsapp share"
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            val shareText = "Hey, checkout this job at Lokal,\n\n ${job.otherDetails}"
+                            val intent = Intent(Intent.ACTION_SEND)
+                            intent.type = "text/plain"
+                            intent.putExtra(Intent.EXTRA_TEXT, shareText)
+                            context.startActivity(
+                                Intent.createChooser(
+                                    intent,
+                                    "Share via"
+                                )
+                            )
+                        }
+                    ) {
                         Icon(Icons.Default.Share, contentDescription = "Share")
                     }
                 }
